@@ -1,0 +1,11 @@
+package com.dhanush.app.ws.repository;
+
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
+
+import com.dhanush.app.ws.entity.UserEntity;
+
+@Repository
+public interface UserRepository extends CrudRepository<UserEntity, Long> {
+	UserEntity findByEmail(String email);
+}
