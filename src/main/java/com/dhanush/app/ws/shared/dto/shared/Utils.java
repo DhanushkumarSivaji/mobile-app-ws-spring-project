@@ -1,4 +1,4 @@
-package com.dhanush.app.ws.shared.utils;
+package com.dhanush.app.ws.shared.dto.shared;
 
 import java.security.SecureRandom;
 import java.util.Random;
@@ -13,7 +13,7 @@ public class Utils {
 	private final int KEY_LENGTH = 256;
 	
 	
-	private String generateUserId(int length) {
+	public String generateUserId(int length) {
 		return generateRandomString(length);
 	}
 	

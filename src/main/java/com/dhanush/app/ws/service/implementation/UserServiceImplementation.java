@@ -9,7 +9,9 @@ import com.dhanush.app.ws.entity.UserEntity;
 import com.dhanush.app.ws.repository.UserRepository;
 import com.dhanush.app.ws.service.UserService;
 import com.dhanush.app.ws.shared.dto.UserDto;
-import com.dhanush.app.ws.shared.utils.Utils;
+import com.dhanush.app.ws.shared.dto.shared.Utils;
+
+
 
 @Service
 public class UserServiceImplementation implements UserService {
@@ -28,10 +30,10 @@ public class UserServiceImplementation implements UserService {
 		UserEntity userEntity = new UserEntity();
 		BeanUtils.copyProperties(user, userEntity);
 		
-//		String publicUserId = utils.generateUserId()
+		String publicUserId = utils.generateUserId(30);
        
 		userEntity.setEncryptedPassword("test");
-		userEntity.setUserId("testUserId");
+		userEntity.setUserId(publicUserId);
 		
 		UserEntity storedUserDetails = userRepository.save(userEntity);
 		
