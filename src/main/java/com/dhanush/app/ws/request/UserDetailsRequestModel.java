@@ -1,6 +1,6 @@
 package com.dhanush.app.ws.request;
 
-public class UserRequest {
+public class UserDetailsRequestModel {
 	private String firstName;
 	private String lastName;
 	private String email;

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dhanush.app.ws.request.UserRequest;
+import com.dhanush.app.ws.request.UserDetailsRequestModel;
 import com.dhanush.app.ws.response.UserResponse;
 import com.dhanush.app.ws.service.UserService;
 import com.dhanush.app.ws.shared.dto.UserDto;
@@ -28,7 +28,7 @@ public class UserController {
 	};
 	
 	@PostMapping
-	public UserResponse createUser(@RequestBody UserRequest userDetails) {
+	public UserResponse createUser(@RequestBody UserDetailsRequestModel userDetails) {
 		UserResponse returnValue = new UserResponse();
 		UserDto userDto = new UserDto();
 		BeanUtils.copyProperties(userDetails, userDto);
