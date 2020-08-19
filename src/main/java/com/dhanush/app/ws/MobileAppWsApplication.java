@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.dhanush.app.ws.security.AppProperties;
+
 @SpringBootApplication
 @ComponentScan("com.dhanush.app.ws.*")
 public class MobileAppWsApplication {
@@ -22,6 +24,11 @@ public class MobileAppWsApplication {
 	@Bean
 	public SpringApplicationContext springApplicationContext() {
 		return new SpringApplicationContext();
+	}
+	
+	@Bean(name="AppProperties")
+	public AppProperties pppProperties() {
+		return new AppProperties();
 	}
 	
 
