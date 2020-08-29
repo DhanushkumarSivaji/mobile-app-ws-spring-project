@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dhanush.app.ws.exceptions.UserServiceException;
 import com.dhanush.app.ws.request.UserDetailsRequestModel;
 import com.dhanush.app.ws.response.ErrorMessages;
+import com.dhanush.app.ws.response.OperationStatusModel;
+import com.dhanush.app.ws.response.RequestOperationStatus;
 import com.dhanush.app.ws.response.UserResponse;
 import com.dhanush.app.ws.service.UserService;
 import com.dhanush.app.ws.shared.dto.UserDto;
@@ -53,14 +55,28 @@ public class UserController {
 		return returnValue;
 	};
 	
-	@PutMapping
-	public String updateUser() {
-		return "User updates successfully";
+	@PutMapping(path="/{id}")
+	public UserResponse updateUser(@PathVariable String id,@RequestBody UserDetailsRequestModel userDetails) {
+		UserResponse returnValue = new UserResponse();
+
+		UserDto userDto = new UserDto();
+		BeanUtils.copyProperties(userDetails, userDto);
+
+		UserDto updatedUser = userService.updateUser(id, userDto);
+		BeanUtils.copyProperties(updatedUser, returnValue);
+
+		return returnValue;
 	};
 	
-	@DeleteMapping
-	public String deleteUser() {
-		return "User deleted successfully";
+	@DeleteMapping(path = "/{id}", produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
+	public OperationStatusModel deleteUser(@PathVariable String id) {
+		OperationStatusModel returnValue = new OperationStatusModel();
+		returnValue.setOperationName(RequestOperationName.DELETE.name());
+
+		userService.deleteUser(id);
+
+		returnValue.setOperationResult(RequestOperationStatus.SUCCESS.name());
+		return returnValue;
 	};
 
 }
