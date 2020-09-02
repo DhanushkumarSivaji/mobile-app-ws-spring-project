@@ -1,9 +1,11 @@
 package com.dhanush.app.ws.controller;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -35,13 +37,13 @@ public class UserController {
 
 	// MediaType.APPLICATION_JSON_VALUE - SEND RESPONSE IN JSON , ORDER MATTERS IF
 	// XML IS IMPLEMENTED IN FIRST IT WILL SEND XML AS DEFAULT.
-	@GetMapping(path = "/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE,
-			MediaType.APPLICATION_XML_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE,
-					MediaType.APPLICATION_XML_VALUE })
+	@GetMapping(path = "/{id}")
 	public UserResponse getUser(@PathVariable String id) {
 		UserResponse returnValue = new UserResponse();
 		UserDto userDto = userService.getUserByUserId(id);
-		BeanUtils.copyProperties(userDto, returnValue);
+		ModelMapper modelMapper = new ModelMapper();
+		returnValue = modelMapper.map(userDto, UserResponse.class);
+
 		return returnValue;
 	};
 
@@ -90,11 +92,15 @@ public class UserController {
 
 		List<UserDto> users = userService.getUsers(page, limit);
 
-		for (UserDto userDto : users) {
-			UserResponse userModel = new UserResponse();
-			BeanUtils.copyProperties(userDto, userModel);
-			returnValue.add(userModel);
-		}
+		Type listType = new TypeToken<List<UserResponse>>() {
+		}.getType();
+		returnValue = new ModelMapper().map(users, listType);
+
+//		for (UserDto userDto : users) {
+//			UserResponse userModel = new UserResponse();
+//			BeanUtils.copyProperties(userDto, userModel);
+//			returnValue.add(userModel);
+//		}
 
 		return returnValue;
 	}
