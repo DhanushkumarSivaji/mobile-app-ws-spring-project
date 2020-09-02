@@ -21,11 +21,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dhanush.app.ws.exceptions.UserServiceException;
 import com.dhanush.app.ws.request.UserDetailsRequestModel;
+import com.dhanush.app.ws.response.AddressesResponse;
 import com.dhanush.app.ws.response.ErrorMessages;
 import com.dhanush.app.ws.response.OperationStatusModel;
 import com.dhanush.app.ws.response.RequestOperationStatus;
 import com.dhanush.app.ws.response.UserResponse;
+import com.dhanush.app.ws.service.AddressService;
 import com.dhanush.app.ws.service.UserService;
+import com.dhanush.app.ws.shared.dto.AddressDto;
 import com.dhanush.app.ws.shared.dto.UserDto;
 
 @RestController
@@ -34,6 +37,9 @@ public class UserController {
 
 	@Autowired
 	UserService userService;
+
+	@Autowired
+	AddressService addressesService;
 
 	// MediaType.APPLICATION_JSON_VALUE - SEND RESPONSE IN JSON , ORDER MATTERS IF
 	// XML IS IMPLEMENTED IN FIRST IT WILL SEND XML AS DEFAULT.
@@ -103,6 +109,36 @@ public class UserController {
 //		}
 
 		return returnValue;
+	}
+
+	// http://localhost:8080/mobile-app-ws/users/jfhdjeufhdhdj/addressses
+
+	@GetMapping(path = "/{id}/addresses", produces = { MediaType.APPLICATION_JSON_VALUE,
+			MediaType.APPLICATION_XML_VALUE, })
+	public List<AddressesResponse> getUserAddresses(@PathVariable String id) {
+		List<AddressesResponse> returnValue = new ArrayList<>();
+
+		List<AddressDto> addressesDTO = addressesService.getAddresses(id);
+
+		if (addressesDTO != null && !addressesDTO.isEmpty()) {
+			Type listType = new TypeToken<List<AddressesResponse>>() {
+			}.getType();
+			ModelMapper modelMapper = new ModelMapper();
+			returnValue = new ModelMapper().map(addressesDTO, listType);
+
+		}
+
+		return returnValue;
+	}
+
+	@GetMapping(path = "/{userId}/addresses/{addressId}", produces = { MediaType.APPLICATION_JSON_VALUE,
+			MediaType.APPLICATION_XML_VALUE })
+	public AddressesResponse getUserAddress(@PathVariable String addressId) {
+
+		AddressDto addressesDTO = addressesService.getAddress(addressId);
+		ModelMapper modelMapper = new ModelMapper();
+
+		return modelMapper.map(addressesDTO, AddressesResponse.class);
 	}
 
 }
