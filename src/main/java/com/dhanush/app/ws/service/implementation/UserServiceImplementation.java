@@ -23,6 +23,7 @@ import com.dhanush.app.ws.response.ErrorMessages;
 import com.dhanush.app.ws.service.UserService;
 import com.dhanush.app.ws.shared.dto.AddressDto;
 import com.dhanush.app.ws.shared.dto.UserDto;
+import com.dhanush.app.ws.shared.dto.shared.AmazonSES;
 import com.dhanush.app.ws.shared.dto.shared.Utils;
 
 
@@ -60,10 +61,14 @@ public class UserServiceImplementation implements UserService {
        
 		userEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 		userEntity.setUserId(publicUserId);
+		userEntity.setEmailVerificationToken(utils.generateEmailVerificationToken(publicUserId));
+		userEntity.setEmailVerificationStatus(false);
 		
 		UserEntity storedUserDetails = userRepository.save(userEntity);
+		UserDto returnValue = modelMapper.map(storedUserDetails, UserDto.class);
 		
-		UserDto returnValue = modelMapper.map(storedUserDetails, UserDto.class);		
+		new AmazonSES().verifyEmail(returnValue);
+		
 		return returnValue;
 	}
 
@@ -72,7 +77,7 @@ public class UserServiceImplementation implements UserService {
 		UserEntity userEntity = userRepository.findByEmail(email);
 		if(userEntity == null) throw new UsernameNotFoundException(email);
 				
-		return new User(userEntity.getEmail(),userEntity.getEncryptedPassword(),new ArrayList<>());
+		return new User(userEntity.getEmail(),userEntity.getEncryptedPassword(),userEntity.getEmailVerificationStatus(),true,true,true ,new ArrayList<>());
 	}
 	
 	@Override
@@ -146,6 +151,26 @@ List<UserDto> returnValue = new ArrayList<>();
         }
 		
 		return returnValue;
+	}
+
+	@Override
+	public boolean verifyEmailToken(String token) {
+		boolean returnValue = false;
+
+        // Find user by token
+        UserEntity userEntity = userRepository.findUserByEmailVerificationToken(token);
+
+        if (userEntity != null) {
+            boolean hastokenExpired = Utils.hasTokenExpired(token);
+            if (!hastokenExpired) {
+                userEntity.setEmailVerificationToken(null);
+                userEntity.setEmailVerificationStatus(Boolean.TRUE);
+                userRepository.save(userEntity);
+                returnValue = true;
+            }
+        }
+
+        return returnValue;
 	}
 
 }
