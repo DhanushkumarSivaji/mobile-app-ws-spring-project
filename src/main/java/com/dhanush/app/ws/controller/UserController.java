@@ -76,10 +76,10 @@ public class UserController {
 		UserResponse returnValue = new UserResponse();
 
 		UserDto userDto = new UserDto();
-		BeanUtils.copyProperties(userDetails, userDto);
+		userDto = new ModelMapper().map(userDetails, UserDto.class);
 
 		UserDto updatedUser = userService.updateUser(id, userDto);
-		BeanUtils.copyProperties(updatedUser, returnValue);
+		returnValue = new ModelMapper().map(updatedUser, UserResponse.class);
 
 		return returnValue;
 	};
