@@ -32,11 +32,16 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 		 .permitAll()
 		 .antMatchers(HttpMethod.POST,SecurityConstants.PASSWORD_RESET_URL)
 		 .permitAll()
+		 .antMatchers(SecurityConstants.H2_CONSOLE)
+		 .permitAll()
 		 .anyRequest().authenticated().and()
 		 .addFilter(getAuthenticationFilter())
 		 .addFilter(new AuthorizationFilter(authenticationManager()))
 		 .sessionManagement()
 		 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+		
+		//h2-database
+		http.headers().frameOptions().disable();
 	}
 
 	protected AuthenticationFilter getAuthenticationFilter() throws Exception {
