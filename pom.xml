@@ -13,7 +13,7 @@
 	<artifactId>mobile-app-ws</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	
+
 	<name>mobile-app-ws</name>
 	<description>This is a users portal app for management</description>
 
@@ -49,13 +49,13 @@
 			<groupId>com.fasterxml.jackson.dataformat</groupId>
 			<artifactId>jackson-dataformat-xml</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-tomcat</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.modelmapper</groupId>
 			<artifactId>modelmapper</artifactId>
@@ -68,6 +68,17 @@
 			<artifactId>aws-java-sdk-ses</artifactId>
 			<version>1.11.856</version>
 		</dependency>
+
+		<dependency>
+
+			<groupId>io.springfox</groupId>
+
+			<artifactId>springfox-boot-starter</artifactId>
+
+			<version>3.0.0</version>
+
+		</dependency>
+
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

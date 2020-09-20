@@ -34,6 +34,9 @@ import com.dhanush.app.ws.service.UserService;
 import com.dhanush.app.ws.shared.dto.AddressDto;
 import com.dhanush.app.ws.shared.dto.UserDto;
 
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+
 @RestController
 @RequestMapping("users")
 @CrossOrigin(origins="*")
@@ -47,6 +50,10 @@ public class UserController {
 
 	// MediaType.APPLICATION_JSON_VALUE - SEND RESPONSE IN JSON , ORDER MATTERS IF
 	// XML IS IMPLEMENTED IN FIRST IT WILL SEND XML AS DEFAULT.
+	
+	@ApiImplicitParams({
+		@ApiImplicitParam(name="authorization" , value="Bearer JWT Token" , paramType="header")
+	})
 	@GetMapping(path = "/{id}")
 	public UserResponse getUser(@PathVariable String id) {
 		UserResponse returnValue = new UserResponse();
@@ -71,6 +78,9 @@ public class UserController {
 		return returnValue;
 	};
 
+	@ApiImplicitParams({
+		@ApiImplicitParam(name="authorization" , value="Bearer JWT Token" , paramType="header")
+	})
 	@PutMapping(path = "/{id}")
 	public UserResponse updateUser(@PathVariable String id, @RequestBody UserDetailsRequestModel userDetails) {
 		UserResponse returnValue = new UserResponse();
@@ -83,7 +93,10 @@ public class UserController {
 
 		return returnValue;
 	};
-
+	
+	@ApiImplicitParams({
+		@ApiImplicitParam(name="authorization" , value="Bearer JWT Token" , paramType="header")
+	})
 	@DeleteMapping(path = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 	public OperationStatusModel deleteUser(@PathVariable String id) {
 		OperationStatusModel returnValue = new OperationStatusModel();
@@ -94,7 +107,10 @@ public class UserController {
 		returnValue.setOperationResult(RequestOperationStatus.SUCCESS.name());
 		return returnValue;
 	};
-
+	
+	@ApiImplicitParams({
+		@ApiImplicitParam(name="authorization" , value="Bearer JWT Token" , paramType="header")
+	})
 	@GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 	public List<UserResponse> getUsers(@RequestParam(value = "page", defaultValue = "0") int page,
 			@RequestParam(value = "limit", defaultValue = "5") int limit) {
@@ -115,8 +131,11 @@ public class UserController {
 		return returnValue;
 	}
 
+	
 	// http://localhost:8080/mobile-app-ws/users/jfhdjeufhdhdj/addressses
-
+	@ApiImplicitParams({
+		@ApiImplicitParam(name="authorization" , value="Bearer JWT Token" , paramType="header")
+	})
 	@GetMapping(path = "/{id}/addresses", produces = { MediaType.APPLICATION_JSON_VALUE,
 			MediaType.APPLICATION_XML_VALUE, })
 	public List<AddressesResponse> getUserAddresses(@PathVariable String id) {
@@ -135,6 +154,9 @@ public class UserController {
 		return returnValue;
 	}
 
+	@ApiImplicitParams({
+		@ApiImplicitParam(name="authorization" , value="Bearer JWT Token" , paramType="header")
+	})
 	@GetMapping(path = "/{userId}/addresses/{addressId}", produces = { MediaType.APPLICATION_JSON_VALUE,
 			MediaType.APPLICATION_XML_VALUE })
 	public AddressesResponse getUserAddress(@PathVariable String addressId) {
